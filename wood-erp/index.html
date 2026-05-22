@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>森达木业 ERP</title>
+  <script>
+    // 语言早期应用
+    (function() {
+      try {
+        var lang = localStorage.getItem('wood_erp_lang');
+        if (lang !== 'zh-CN' && lang !== 'en-US') lang = 'zh-CN';
+        document.documentElement.setAttribute('lang', lang);
+      } catch(e) {}
+    })();
+  </script>
+  <!-- 字体加载(双 CDN:Google 优先,jsdelivr 兜底以应对网络受限环境) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- jsdelivr 兜底(大陆友好) -->
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/index.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <script>
+    // 字体加载诊断 - 控制台报告
+    if (document.fonts) {
+      document.fonts.ready.then(() => {
+        const loaded = new Set();
+        document.fonts.forEach(f => loaded.add(f.family));
+        const hasInter = loaded.has('Inter');
+        const hasMono  = loaded.has('JetBrains Mono');
+        if (hasInter && hasMono) {
+          console.log('%c✓ 字体加载成功: Inter + JetBrains Mono', 'color:#10b981');
+        } else {
+          console.warn('⚠ 字体未完全加载,当前 fallback 到系统字体:', { Inter: hasInter, JetBrainsMono: hasMono });
+          console.warn('  网络问题导致 Google Fonts / jsdelivr 都失败时,会使用系统默认字体(等宽字体看起来会更粗、字距较宽)');
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+
+<!-- Layout 启动后会注入 sidebar / topbar / content -->
+<div id="app-bootstrap" style="padding: 80px 40px; text-align: center; color: var(--text-3);">
+  <div style="font-size: 24px; margin-bottom: 12px; font-family: var(--font-mono);">森</div>
+  <div style="font-size: 12px;">Loading...</div>
+</div>
+
+<!-- Core 基础(无依赖) -->
+<script src="js/core/utils.js"></script>
+<script src="js/core/storage.js"></script>
+
+<!-- i18n -->
+<script src="js/i18n/zh-CN.js"></script>
+<script src="js/i18n/en-US.js"></script>
+<script src="js/core/i18n.js"></script>
+
+<!-- Core -->
+<script src="js/core/db.js"></script>
+<script src="js/core/eventBus.js"></script>
+<script src="js/core/stateMachine.js"></script>
+<script src="js/core/idGenerator.js"></script>
+<script src="js/core/icons.js"></script>
+<script src="js/core/roles.js"></script>
+<script src="js/core/session.js"></script>
+<script src="js/core/permissions.js"></script>
+<script src="js/core/sensitive.js"></script>
+<script src="js/core/workflowMapper.js"></script>
+
+<!-- Repos(数据访问层 - 上云时只改这一层) -->
+<script src="js/repos/baseRepo.js"></script>
+<script src="js/repos/index.js"></script>
+
+<!-- Models -->
+<script src="js/models/schema.js"></script>
+<script src="js/models/seed.js"></script>
+
+<!-- Services -->
+<script src="js/services/customerService.js"></script>
+<script src="js/services/productService.js"></script>
+<script src="js/services/orderTaskService.js"></script>
+<script src="js/services/salesOrderService.js"></script>
+<script src="js/services/deliveryService.js"></script>
+<script src="js/services/settlementService.js"></script>
+<script src="js/services/debtBoardService.js"></script>
+<script src="js/services/warehouseService.js"></script>
+<script src="js/services/inventoryService.js"></script>
+<script src="js/services/inboundService.js"></script>
+<script src="js/services/financeService.js"></script>
+<script src="js/services/auditService.js"></script>
+<script src="js/services/archiveService.js"></script>
+<script src="js/services/attachmentService.js"></script>
+<script src="js/services/notificationService.js"></script>
+<script src="js/services/approvalService.js"></script>
+<script src="js/services/stockTakingService.js"></script>
+<script src="js/services/orderTimelineService.js"></script>
+<script src="js/services/settlementPolicyEngine.js"></script>
+<script src="js/services/idService.js"></script>
+<script src="js/services/timeService.js"></script>
+<script src="js/services/customerStats.js"></script>
+<script src="js/services/vehicleService.js"></script>
+<script src="js/services/fleetService.js"></script>
+<script src="js/services/roleTaskCount.js"></script>
+
+<!-- Components (UI 组件) -->
+<script src="js/components/badge.js"></script>
+<script src="js/components/dataTable.js"></script>
+<script src="js/components/modal.js"></script>
+<script src="js/components/toast.js"></script>
+<script src="js/components/attachmentUploader.js"></script>
+<script src="js/components/attachmentViewer.js"></script>
+<script src="js/components/excelExporter.js"></script>
+<script src="js/components/enhancedSelect.js"></script>
+
+<!-- Architecture (新) -->
+<script src="app/routes.js"></script>
+<script src="app/router.js"></script>
+<script src="app/layout.js"></script>
+
+<!-- 老 modules(逻辑实现,被 view wrap) -->
+<script src="js/modules/customers.js"></script>
+<script src="js/modules/customerHub.js"></script>
+<script src="js/modules/orderCenter.js"></script>
+<script src="js/modules/orderNew.js"></script>
+<script src="js/modules/orderDetailV2.js"></script>
+<script src="js/modules/settlementCenter.js"></script>
+<script src="js/modules/settlementDetail.js"></script>
+<script src="js/modules/debtBoard.js"></script>
+<script src="js/modules/warehouses.js"></script>
+<script src="js/modules/inventory.js"></script>
+<script src="js/modules/movements.js"></script>
+<script src="js/modules/stockTakings.js"></script>
+<script src="js/modules/stockTakingDetail.js"></script>
+<script src="js/modules/inboundList.js"></script>
+<script src="js/modules/inboundDetail.js"></script>
+<!-- 仓储重构:出库/物流 -->
+<script src="js/modules/outbound.js"></script>
+<script src="js/modules/logistics.js"></script>
+<script src="js/modules/logisticsDetail.js"></script>
+<script src="js/modules/financeCenter.js"></script>
+<script src="js/modules/inboxView.js"></script>
+<script src="js/modules/productList.js"></script>
+<script src="js/modules/productDetail.js"></script>
+<script src="js/modules/salesBoard.js"></script>
+
+<!-- Views (薄 wrapper) -->
+<script src="app/views/dashboard.js"></script>
+<script src="app/views/customer-list.js"></script>
+<script src="app/views/_lists.js"></script>
+<script src="app/views/_details.js"></script>
+<script src="app/views/admin-users.js"></script>
+
+<script>
+  // 启动:种子数据 + Session + 路由
+  (function bootstrap() {
+    // === schema 版本检测 ===
+    // 每次 seed 数据结构有大改动时,把 SCHEMA_VERSION 加 1
+    // 浏览器 localStorage 里的版本号不匹配 → 自动重置
+    const SCHEMA_VERSION = '5.2';   // v5.2=物流大改造:车辆主数据 + DN 编号 + vehicleId + 运费字段
+    const storedVersion = Storage.getPref('senda_schema_version');
+    if (storedVersion !== SCHEMA_VERSION) {
+      console.log(`[Bootstrap] Schema 版本变化: ${storedVersion} → ${SCHEMA_VERSION},自动重置数据`);
+      const keysToRemove = Storage.keysWithPrefix('senda_');
+      keysToRemove.forEach(k => Storage.removeData(k));
+      Storage.setPref('senda_schema_version', SCHEMA_VERSION);
+    }
+    // 数据库为空 → seed
+    if (DB.find('salesOrders').length === 0) {
+      Seed.buildAndSeed();
+    }
+    // Session 必须在 seed 之后(因为依赖 employees 表)
+    Session.init();
+
+    // 自动归档:90 天以前的库存流水
+    try {
+      const n = ArchiveService.autoArchiveStockMovements(90);
+      if (n > 0) console.log(`[Bootstrap] 自动归档 ${n} 条 90+ 天的库存流水`);
+    } catch (e) { console.warn('[Bootstrap] 自动归档失败:', e); }
+
+    Router.start();
+  })();
+</script>
+
+</body>
+</html>
